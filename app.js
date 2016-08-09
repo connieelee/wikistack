@@ -23,13 +23,14 @@ app.use(bodyParser.urlencoded({extended: false }));
 // static middleware
 app.use(express.static(process.cwd() + '/public'));
 
-// router
+// routers
 app.use('/wiki', require('./routes/wiki.js'));
+app.use('/users', require('./routes/users.js'));
 
 // models
-models.User.sync({})
+models.User.sync({/*force:true*/})
 .then(function () {
-	return models.Page.sync({})
+	return models.Page.sync({/*force:true*/})
 })
 .then(function () {
 	app.listen(3001, function () {

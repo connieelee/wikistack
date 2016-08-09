@@ -23,6 +23,12 @@ var Page = db.define('page', {
 	},
 	status: {
 		type: Sequelize.ENUM('open', 'closed')
+	}, 
+	tags: {
+		type: Sequelize.ARRAY(Sequelize.TEXT),
+		set: function(str) {
+			this.setDataValue('tags', str.split(', '));
+		}
 	}/*,
 	date: {
 		type: Sequelize.DATE,
@@ -37,11 +43,9 @@ var Page = db.define('page', {
 	},
 	hooks: {
 		beforeValidate: function(page, options) {
-			console.log('hi');
 			if (page.title) {
 				page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W+/g, '');
 			} else {
-				// random 5 letter string
 				page.urlTitle = Math.random().toString(36).substring(2, 7);
 			}
 		}
@@ -59,6 +63,8 @@ var User = db.define('user', {
 		allowNull: false
 	}
 });
+
+Page.belongsTo(User, {as: 'author'});
 
 module.exports = {
 	Page: Page,
